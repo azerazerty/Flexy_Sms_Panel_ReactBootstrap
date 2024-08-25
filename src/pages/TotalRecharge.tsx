@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios, { AxiosResponse } from "axios";
 
 import { Button, Col, Form, Row, Spinner, Table } from "react-bootstrap";
 import { format } from "date-fns";
+import { AuthContext } from "./Auth";
 
-const BASE_URL = import.meta.env.BASE_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const day = 60 * 60 * 24 * 1000;
 
-const user = JSON.parse(localStorage.getItem("user")!);
+// const user = JSON.parse(localStorage.getItem("user")!);
 
 type DateRange = {
   begin_date: Date;
@@ -16,6 +17,8 @@ type DateRange = {
 };
 
 function TotalRecharge() {
+  const [user] = useContext(AuthContext);
+
   const [summary, setSummary] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
   const [dateRange, setDateRange] = useState<DateRange>({

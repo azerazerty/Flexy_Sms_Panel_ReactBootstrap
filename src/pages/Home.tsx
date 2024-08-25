@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios, { AxiosResponse } from "axios";
+import { AuthContext } from "./Auth";
 
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -7,11 +8,12 @@ import withReactContent from "sweetalert2-react-content";
 import { Button, Col, Form, Row, Spinner, Table } from "react-bootstrap";
 import { format } from "date-fns";
 
-const BASE_URL = import.meta.env.BASE_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const user = JSON.parse(localStorage.getItem("user")!);
+// const user = JSON.parse(localStorage.getItem("user")!);
 
 function TotalRecharge() {
+  const [user] = useContext(AuthContext);
   const [flexyOperations, setFlexyOperations] = useState<any>();
   const [flexyLoading, setFlexyLoading] = useState<boolean>(true);
 

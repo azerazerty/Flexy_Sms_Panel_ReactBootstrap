@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Col, Row, Form, Image, FloatingLabel } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Logo from "../assets/Logo1.png";
 import axios, { AxiosResponse } from "axios";
+import { AuthContext } from "./Auth";
+import { Navigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function Login() {
+  const [user, setUser] = useContext(AuthContext);
+  if (user) return <Navigate to="/" />;
+
   const [errorLogin, setErrorLogin] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -33,9 +38,10 @@ function Login() {
           token: response.data.auth_token,
           phone: "0" + response.data.phone_number,
         };
+
         localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
         setIsLoading(false);
-        window.location.reload();
       })
       .catch((e) => {
         error = e;

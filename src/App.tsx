@@ -12,12 +12,12 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Protected />}>
-            <Route path="totalRecharge" element={<TotalRecharge />} />
-            <Route index element={<Home />} />
-          </Route>
-          <Route path="/login" element={<Auth />}>
-            <Route index element={<Login />} />
+          <Route element={<Auth />}>
+            <Route path="/" element={<Protected />}>
+              <Route path="totalRecharge" element={<TotalRecharge />} />
+              <Route index element={<Home />} />
+            </Route>
+            <Route path="/login" element={<Login />} />
           </Route>
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

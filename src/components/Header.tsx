@@ -1,4 +1,8 @@
 import Logo from "../assets/Logo1.png";
+import { useContext } from "react";
+
+import { AuthContext } from "../pages/Auth";
+
 import {
   Button,
   Col,
@@ -10,12 +14,15 @@ import {
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const user = JSON.parse(localStorage.getItem("user")!);
+// const user = JSON.parse(localStorage.getItem("user")!);
 
 function Header() {
+  const [user, setUser] = useContext(AuthContext);
+
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("user");
+    setUser(null);
     navigate("/login");
   };
 
