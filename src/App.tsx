@@ -6,7 +6,6 @@ import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.tsx";
 import Protected from "./components/Protected.tsx";
 import Auth from "./pages/Auth.tsx";
-import axios from "axios";
 
 function App() {
   return (
