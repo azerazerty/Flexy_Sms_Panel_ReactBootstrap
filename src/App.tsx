@@ -1,18 +1,25 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import TotalRecharge from "./pages/TotalRecharge.tsx";
+import Home from "./pages/Home.tsx";
+import Login from "./pages/Login.tsx";
+import Protected from "./components/Protected.tsx";
+import Auth from "./pages/Auth.tsx";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Protected />}>
+            <Route path="totalRecharge" element={<TotalRecharge />} />
+            <Route index element={<Home />} />
+          </Route>
+          <Route path="/login" element={<Auth />}>
+            <Route index element={<Login />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
     </>

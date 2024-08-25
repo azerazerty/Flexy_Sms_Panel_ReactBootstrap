@@ -8,3 +8,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.table {
+  text-wrap: nowrap;
+  white-space: nowrap;
+}
+.button {
+  text-wrap: nowrap;
+  white-space: nowrap;
+}
