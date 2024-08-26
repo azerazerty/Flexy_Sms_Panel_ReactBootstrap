@@ -141,6 +141,7 @@ function TotalRecharge() {
         <thead className="table-dark">
           <tr>
             <th>Total Flexy</th>
+            <th>User Percentage</th>
             <th>Total Amount To Pay</th>
             <th>Total Paid Amount</th>
             <th>Total Rest Payment</th>
@@ -172,6 +173,18 @@ function TotalRecharge() {
                 )}
               </span>
               <sub>DA</sub>
+            </td>
+            <td>
+              <span className="fw-semibold text-dark ">
+                {" "}
+                {` % ${
+                  (summary &&
+                    Intl.NumberFormat().format(
+                      parseFloat(summary?.summarey["percentage"])
+                    )) ||
+                  "1"
+                }  `}
+              </span>
             </td>
             <td>
               <span className="text-secondary ">
