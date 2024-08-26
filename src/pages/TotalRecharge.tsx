@@ -1,6 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import axios, { AxiosResponse } from "axios";
 
+import { Helmet } from "react-helmet";
+
 import { Button, Col, Form, Row, Spinner, Table } from "react-bootstrap";
 import { format } from "date-fns";
 import { AuthContext } from "./Auth";
@@ -65,6 +67,9 @@ function TotalRecharge() {
 
   return (
     <>
+      <Helmet>
+        <title>Total Recharge | Flexy Panel</title>
+      </Helmet>
       <Form className="m-2">
         <Form.Group
           as={Row}

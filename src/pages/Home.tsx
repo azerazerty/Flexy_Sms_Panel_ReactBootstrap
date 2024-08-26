@@ -7,6 +7,7 @@ import withReactContent from "sweetalert2-react-content";
 
 import { Button, Col, Form, Row, Spinner, Table } from "react-bootstrap";
 import { format } from "date-fns";
+import { Helmet } from "react-helmet";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -150,6 +151,9 @@ function TotalRecharge() {
 
   return (
     <>
+      <Helmet>
+        <title>Sime Recharge | Flexy Panel</title>
+      </Helmet>
       <h2 className="display-5 text-center mb-2">Sim Recharge</h2>
       <h4 className=" text-center mb-1 fst-italic fw-light">{user.phone}</h4>
       <span className="text-success" style={{ fontSize: "larger" }}>
