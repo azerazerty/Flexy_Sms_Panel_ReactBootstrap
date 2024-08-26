@@ -5,7 +5,15 @@ import { AuthContext } from "./Auth";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
-import { Button, Col, Form, Row, Spinner, Table } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  Col,
+  Form,
+  Row,
+  Spinner,
+  Table,
+} from "react-bootstrap";
 import { format } from "date-fns";
 import { Helmet } from "react-helmet";
 
@@ -153,9 +161,9 @@ function TotalRecharge() {
   return (
     <>
       <Helmet>
-        <title>Sime Recharge | Flexy Panel</title>
+        <title>SIM Recharge | Flexy Panel</title>
       </Helmet>
-      <h2 className="display-5 text-center mb-2">Sim Recharge</h2>
+      <h2 className="display-5 text-center mb-2">SIM Recharge</h2>
       <h4 className=" text-center mb-1 fst-italic fw-light">{user.phone}</h4>
       <span className="text-success" style={{ fontSize: "larger" }}>
         <i className="bi bi-sim-fill"></i>
@@ -178,7 +186,7 @@ function TotalRecharge() {
           <tr>
             <th># Operation Number</th>
             <th>Credit</th>
-            <th>Date and Time</th>
+            <th>Time</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -202,12 +210,15 @@ function TotalRecharge() {
 
                   <sub>DA</sub>
                 </td>
-                <td>
-                  <span className=" fw-light text-dark ">
-                    {`${(flexyOperations && flexy.date) || "0000-00-0000"}`}
-                  </span>
+                <td className="text-center">
+                  <Badge className="fw-semibold fs-6 " bg="danger">
+                    {`${(flexyOperations && flexy.time) || "00:00:00"}`}
+                  </Badge>
+                  {/* <span className=" fw-semibold text-danger ">
+                    {`${(flexyOperations && flexy.date) || "00:00:00"}`}
+                  </span> */}
                 </td>
-                <td>
+                <td className="text-center">
                   <Button
                     id={flexy.operation_number}
                     onClick={async (e) => {

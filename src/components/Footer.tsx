@@ -7,6 +7,7 @@ function Footer() {
         <div className="d-flex justify-content-center align-items-center ">
           <p className="text-muted m-2">
             Ich7en &copy; {`${new Date().getFullYear()}`} <br />
+            {`Powered by `}
             <span>
               <i className="bi bi-github"></i>
             </span>
