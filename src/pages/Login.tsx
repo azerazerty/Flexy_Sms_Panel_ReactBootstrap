@@ -82,7 +82,7 @@ function Login() {
                 className="text-center mb-2"
                 style={{ color: "hsl(217, 10%, 50.8%)" }}
               >
-                To Register An Account , Reach Out To Us :{" "}
+                To Register An Account , Reach Out To Us :
                 {/* <span>
                 <a
                   style={{ textDecoration: "none" }}
@@ -92,17 +92,17 @@ function Login() {
                   Send Message On Whatsapp
                 </a>
               </span> */}
-                <Button
-                  size="lg"
-                  className="mt-4 shadow-lg text-nowrap"
-                  variant="outline-primary"
-                  href="https://wa.me/213659791718"
-                  target="_blank"
-                >
-                  {`Send Message On Whatsapp `}
-                  <Image src={WhatsApp} width={43} />
-                </Button>
               </p>
+              <Button
+                size="lg"
+                className="mt-4 shadow-lg text-nowrap mx-auto"
+                variant="outline-primary"
+                href="https://wa.me/213659791718"
+                target="_blank"
+              >
+                {`Send Message On Whatsapp `}
+                <Image src={WhatsApp} width={43} />
+              </Button>
             </div>
           </Col>
           <Col lg={6} className="mb-5">
