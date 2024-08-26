@@ -71,7 +71,7 @@ function Login() {
       <Container>
         <Row
           style={{ backgroundColor: "hsl(0deg 47.35% 97.83%)" }}
-          className="px-4 py-5 py-md-5 px-md-5 align-items-center text-center text-lg-start"
+          className="px-2  py-5 py-md-5 px-md-5 align-items-center text-center text-lg-start"
         >
           <Col lg={6} className="  mb-5">
             <div className="login-right">
