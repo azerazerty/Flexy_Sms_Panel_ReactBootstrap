@@ -11,16 +11,16 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route element={<Auth />}>
-            <Route path="/" element={<Protected />}>
-              <Route path="totalRecharge" element={<TotalRecharge />} />
-              <Route index element={<Home />} />
+        <Auth>
+          <Routes>
+            <Route element={<Protected />}>
+              <Route path="/totalRecharge" element={<TotalRecharge />} />
+              <Route path="/" element={<Home />} />
             </Route>
             <Route path="/login" element={<Login />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </Auth>
       </BrowserRouter>
     </>
   );

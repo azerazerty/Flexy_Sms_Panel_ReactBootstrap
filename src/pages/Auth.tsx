@@ -1,21 +1,31 @@
-import { Outlet } from "react-router-dom";
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState, createContext, PropsWithChildren } from "react";
 
 export type userType = [user: any, setUser: any];
 export const AuthContext = createContext<userType>([null, null]);
 
-function Auth() {
+function Auth({ children }: PropsWithChildren) {
   const [user, setUser] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const userItem = localStorage.getItem("user") || null;
-    if (userItem) setUser(JSON.parse(localStorage.getItem("user")!));
-    else setUser(null);
-  }, []);
+    if (!user) {
+      const userItem = localStorage.getItem("user");
+      if (userItem) console.log("exist");
+      if (userItem) setUser(JSON.parse(localStorage.getItem("user")!));
+      else setUser(null);
+      setLoading(false);
+    }
+  }, [loading]);
   return (
-    <AuthContext.Provider value={[user, setUser]}>
-      <Outlet />
-    </AuthContext.Provider>
+    <>
+      {loading ? (
+        <></>
+      ) : (
+        <AuthContext.Provider value={[user, setUser]}>
+          {children}
+        </AuthContext.Provider>
+      )}
+    </>
   );
 }
 
