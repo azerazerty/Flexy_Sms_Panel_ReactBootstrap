@@ -127,6 +127,7 @@ function TotalRecharge() {
       .then(async (result) => {
         if (result.isConfirmed) {
           getFlexy();
+          getOperations();
           MySwal.fire({
             title: "Confirmed!",
             text: "Your Flexy has been Confirmed.",
