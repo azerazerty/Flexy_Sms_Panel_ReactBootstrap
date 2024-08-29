@@ -8,6 +8,7 @@ import withReactContent from "sweetalert2-react-content";
 import {
   Badge,
   Button,
+  Card,
   Col,
   Form,
   Row,
@@ -31,10 +32,41 @@ function TotalRecharge() {
 
   const [date, setDate] = useState<Date>(new Date(Date.now()));
 
+  const [filteredUser, setFiltredUser] = useState<String>();
+  // const [sum,setSum] = useState<any>(0)
+
   const MySwal = withReactContent(Swal);
 
   const auth_token = user.token;
   const username = user.username;
+
+  function generateColorFromName(name: string): string {
+    let hash = 0;
+
+    // Generate a hash from the input name
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    // XOR the hash with a large prime number to spread the bits
+    hash = hash ^ 0xbadc0de;
+
+    // Extract RGB components by shifting and masking bits
+    const r = (hash >> 16) & 0xff;
+    const g = (hash >> 8) & 0xff;
+    const b = hash & 0xff;
+
+    // Convert the RGB components to a hex string
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b)
+      .toString(16)
+      .slice(1)
+      .toUpperCase()}`;
+  }
+
+  // Example usage
+  const color = generateColorFromName("John Doe");
+  console.log(color); // Output will be a unique color for "John Doe"
+
   const getFlexy = async () => {
     let toReturn;
     let error;
@@ -153,10 +185,35 @@ function TotalRecharge() {
       });
   };
 
+  const sumCredit = () => {
+    if (!historyOperations) return 0;
+    let sum = 0;
+    if (!filteredUser || filteredUser.length < 1) {
+      historyOperations.forEach((operation: any) => {
+        sum += parseFloat(operation.credit) || 0;
+      });
+      return sum;
+    }
+
+    historyOperations
+      .filter((operation: any) => filteredUser === operation?.user)
+      .forEach((operation: any) => {
+        sum += parseFloat(operation.credit) || 0;
+      });
+    return sum;
+  };
+
   useEffect(() => {
     getFlexy();
     getOperations();
   }, []);
+
+  // useEffect(() => {
+  //   if (historyOperations) {
+  //     console.log(sumCredit());
+  //     sumCredit();
+  //   }
+  // }, [historyOperations, filteredUser]);
 
   return (
     <>
@@ -175,7 +232,7 @@ function TotalRecharge() {
 
       <Row>
         <h4 className="mt-5  mb-4">
-          Active Flexy Operations To Confirm for Today:
+          Active Flexy Operations To Confirm for the Past Three Days:
           {/* <span className="text-primary">
             {`${format(Date.now(), "yyyy-MM-dd")}`}
           </span> */}
@@ -289,6 +346,7 @@ function TotalRecharge() {
           date && format(date, "yyyy-MM-dd")
         }`}</span>
       </h5>
+
       <Row>
         <Form>
           <Form.Group
@@ -338,6 +396,60 @@ function TotalRecharge() {
           </Form.Group>
         </Form>
       </Row>
+      <Card className="mb-4" border="warning">
+        <Card.Header className="border-warning fw-bold ">
+          Total Credit
+        </Card.Header>
+        <Card.Body className="fs-4">
+          Total Credit for Selected Users is:{" "}
+          <Badge bg="success">
+            {`${
+              Intl.NumberFormat().format(parseFloat(sumCredit() + "")) || "0"
+            }  `}
+
+            <sub>DA</sub>
+          </Badge>
+        </Card.Body>
+      </Card>
+      <Row className="mb-3 d-flex  align-items-center">
+        <Col xs={2}>
+          <Form.Label>Select User:</Form.Label>
+        </Col>
+        <Col xs={4}>
+          {operationsLoading && (
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          )}
+          {!operationsLoading &&
+            (!historyOperations || historyOperations.length <= 0) && (
+              <Form.Control
+                type="text"
+                value="No User To Select "
+                readOnly
+                disabled
+              />
+            )}
+          {!operationsLoading &&
+            historyOperations &&
+            historyOperations.length > 0 && (
+              <Form.Select onChange={(e) => setFiltredUser(e.target.value)}>
+                <option value="">Select User</option>
+                {Array.from(
+                  new Set(
+                    historyOperations.map((operation: any) => operation.user)
+                  )
+                )
+                  .filter((user) => user && user !== "")
+                  .map((user: any) => (
+                    <option key={user} value={user}>
+                      {user}
+                    </option>
+                  ))}
+              </Form.Select>
+            )}
+        </Col>
+      </Row>
       <Table responsive>
         <thead>
           <tr>
@@ -351,44 +463,56 @@ function TotalRecharge() {
           {historyOperations &&
           !operationsLoading &&
           historyOperations?.length > 0 ? (
-            historyOperations.map((operation: any) => (
-              <tr key={operation.operation_number} className="fw-bold ">
-                <td>
-                  <span className="text-dark ">{`# ${
-                    operation.operation_number || 0
-                  }`}</span>
-                </td>
-                <td>
-                  <span className="text-success ">
-                    {`${
-                      (operation.credit &&
-                        Intl.NumberFormat().format(
-                          parseFloat(operation.credit)
-                        )) ||
-                      "0"
-                    }  `}
-                  </span>
+            historyOperations
+              .filter((operation: any) => {
+                if (!filteredUser || filteredUser == "") return true;
+                return operation?.user === filteredUser;
+              })
+              .map((operation: any) => (
+                <tr key={operation.operation_number} className="fw-bold ">
+                  <td>
+                    <span className="text-dark ">{`# ${
+                      operation.operation_number || 0
+                    }`}</span>
+                  </td>
+                  <td>
+                    <span className="text-success ">
+                      {`${
+                        (operation.credit &&
+                          Intl.NumberFormat().format(
+                            parseFloat(operation.credit)
+                          )) ||
+                        "0"
+                      }  `}
+                    </span>
 
-                  <sub>DA</sub>
-                </td>
-                <td>
-                  <span className=" fw-light text-dark ">
-                    {`${
-                      (historyOperations && operation.date) || "0000-00-0000"
-                    }`}
-                  </span>
-                </td>
-                <td>
-                  <span className=" fw-light text-dark ">
-                    {`${
-                      (historyOperations &&
-                        String(operation.user).toUpperCase()) ||
-                      "User Unknown"
-                    }`}
-                  </span>
-                </td>
-              </tr>
-            ))
+                    <sub>DA</sub>
+                  </td>
+                  <td>
+                    <span className=" fw-light text-dark ">
+                      {`${
+                        (historyOperations && operation.date) || "0000-00-0000"
+                      }`}
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      className=" badge text-light fw-bold"
+                      style={{
+                        backgroundColor: `${generateColorFromName(
+                          operation?.user || "User Unknown"
+                        )}`,
+                      }}
+                    >
+                      {`${
+                        (historyOperations &&
+                          String(operation.user).toUpperCase()) ||
+                        "User Unknown"
+                      }`}
+                    </span>
+                  </td>
+                </tr>
+              ))
           ) : (
             <>
               {!operationsLoading ? (
