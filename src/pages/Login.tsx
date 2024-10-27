@@ -21,7 +21,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function Login() {
   const [user, setUser] = useContext(AuthContext);
-  if (user) return <Navigate to="/" />;
+  if (user && user.token) return <Navigate to="/" />;
 
   const [errorLogin, setErrorLogin] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");

@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import axios, { AxiosResponse } from "axios";
+import axios, { Axios, AxiosError, AxiosResponse } from "axios";
 import { AuthContext } from "./Auth";
 
 import Swal from "sweetalert2";
@@ -17,13 +17,14 @@ import {
 } from "react-bootstrap";
 import { format } from "date-fns";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // const user = JSON.parse(localStorage.getItem("user")!);
 
 function TotalRecharge() {
-  const [user] = useContext(AuthContext);
+  const [user, setUser] = useContext(AuthContext);
   const [flexyOperations, setFlexyOperations] = useState<any>();
   const [flexyLoading, setFlexyLoading] = useState<boolean>(true);
 
@@ -33,12 +34,24 @@ function TotalRecharge() {
   const [date, setDate] = useState<Date>(new Date(Date.now()));
 
   const [filteredUser, setFiltredUser] = useState<String>();
+  const navigate = useNavigate();
   // const [sum,setSum] = useState<any>(0)
 
   const MySwal = withReactContent(Swal);
 
   const auth_token = user.token;
   const username = user.username;
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
+
+  const checkAuthError = (e: AxiosError) => {
+    if (e?.message === "Invalid user or auth_token") handleLogout();
+    else return;
+  };
 
   function generateColorFromName(name: string): string {
     let hash = 0;
@@ -83,6 +96,7 @@ function TotalRecharge() {
         setFlexyLoading(false);
       })
       .catch((e) => {
+        checkAuthError(e);
         error = e;
         setFlexyOperations(error);
         setFlexyLoading(false);
@@ -108,8 +122,9 @@ function TotalRecharge() {
         setOperationsLoading(false);
       })
       .catch((e) => {
+        checkAuthError(e);
         error = e;
-        setHistoryOperations(error);
+        // setHistoryOperations(error);
         setOperationsLoading(false);
       });
     if (error) throw new Error(error);
@@ -186,9 +201,11 @@ function TotalRecharge() {
   };
 
   const sumCredit = () => {
+    console.log("im here");
     if (!historyOperations) return 0;
     let sum = 0;
     if (!filteredUser || filteredUser.length < 1) {
+      console.log(historyOperations);
       historyOperations.forEach((operation: any) => {
         sum += parseFloat(operation.credit) || 0;
       });

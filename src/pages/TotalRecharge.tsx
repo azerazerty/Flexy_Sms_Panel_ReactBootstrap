@@ -1,11 +1,12 @@
 import { useEffect, useState, useContext } from "react";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { Helmet } from "react-helmet";
 
 import { Button, Col, Form, Row, Spinner, Table } from "react-bootstrap";
 import { format } from "date-fns";
 import { AuthContext } from "./Auth";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -19,7 +20,8 @@ type DateRange = {
 };
 
 function TotalRecharge() {
-  const [user] = useContext(AuthContext);
+  const [user, setUser] = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [summary, setSummary] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -30,6 +32,17 @@ function TotalRecharge() {
 
   const auth_token = user.token;
   const username = user.username;
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
+
+  const checkAuthError = (e: AxiosError) => {
+    if (e?.message === "Invalid user or auth_token") handleLogout();
+    else return;
+  };
 
   const getSummary = async () => {
     let toReturn;
@@ -50,6 +63,7 @@ function TotalRecharge() {
       })
       .catch((e) => {
         error = e;
+        checkAuthError(e);
         setSummary(error);
         setLoading(false);
       });
