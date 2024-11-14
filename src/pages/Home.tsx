@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import axios, { Axios, AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { AuthContext } from "./Auth";
 
 import Swal from "sweetalert2";
